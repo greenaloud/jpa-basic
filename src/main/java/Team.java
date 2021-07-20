@@ -5,12 +5,13 @@ import java.util.List;
 @Entity
 public class Team {
 
-    @Id @Column(name = "team_id")
+    @Id
+    @Column(name = "team_id")
     private String id;
 
     private String name;
 
-    @OneToMany()
+    @OneToMany(mappedBy = "team")
     private List<Member> members = new ArrayList<>();
 
     public Team() {
