@@ -5,28 +5,20 @@ import java.util.List;
 @Entity
 public class Team {
 
-    @Id
+    @Id @GeneratedValue
     @Column(name = "team_id")
-    private String id;
+    private Long id;
 
     private String name;
 
     @OneToMany(mappedBy = "team")
     private List<Member> members = new ArrayList<>();
 
-    public Team() {
-    }
-
-    public Team(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
