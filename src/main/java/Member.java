@@ -1,3 +1,5 @@
+import org.hibernate.annotations.Fetch;
+
 import javax.persistence.*;
 
 @Entity

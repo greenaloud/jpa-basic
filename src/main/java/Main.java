@@ -1,3 +1,5 @@
+import com.sun.java.swing.plaf.motif.MotifButtonUI;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -18,7 +20,7 @@ public class Main {
 //            logicLegacy(em);
 //            logicJpa(em);
 //            logicJpaBidirectional(em);
-//            logicClassCheck(em);
+            logicClassCheck(em);
             tx.commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -32,10 +34,10 @@ public class Main {
 
 
 /*
-
     private static void logicLegacy(EntityManager em) {
 
-        Team team = new Team("치킨팀");
+        Team team = new Team();
+        team.setName("치킨팀");
         em.persist(team);
 
         Member member1 = new Member();
@@ -48,10 +50,13 @@ public class Main {
         member2.setTeamId(team.getId());
         em.persist(member2);
 
-    }
-*/
+        Member foundMember = em.find(Member.class, member1.getId());
+        Long teamId = foundMember.getTeamId();
+        Team foundTeam = em.find(Team.class, teamId);
+        System.out.println(foundTeam.getName());
 
-/*
+    }*/
+
     private static void logicClassCheck(EntityManager em) {
 
         Team team = new Team();
@@ -92,28 +97,38 @@ public class Main {
         }
 
     }
-*/
 
     private static void logicJpa(EntityManager em) {
 
         Team team = new Team();
         team.setName("치킨팀");
         em.persist(team);
+        System.out.println(team.getMembers().size());
 
         Member member1 = new Member();
         member1.setUsername("김양념");
         member1.setTeam(team);
         em.persist(member1);
+        System.out.println(team.getMembers().size());
 
         Member member2 = new Member();
         member2.setUsername("김후라이드");
         member2.setTeam(team);
         em.persist(member2);
+        System.out.println(team.getMembers().size());
 
-//        em.flush();
-//        em.clear();
+        em.flush();
+        em.clear();
 
         // 멤버 및 팀 조회 로직 작성
+        Member foundMember = em.find(Member.class, member1.getId());
+        System.out.println(foundMember.getTeam().getName());
+
+        Team foundTeam = em.find(Team.class, team.getId());
+        System.out.println(team==foundTeam);
+        System.out.println(foundTeam.getMembers().size());
+
+        foundTeam.getMembers().iterator().forEachRemaining(m -> System.out.println(m.getUsername()));
 
     }
 
@@ -123,6 +138,10 @@ public class Main {
         team.setName("치킨팀");
         em.persist(team);
 
+        Team team1 = new Team();
+        team1.setName("피자팀");
+        em.persist(team1);
+
         Member member1 = new Member();
         member1.setUsername("김양념");
         member1.setTeam(team);
@@ -132,6 +151,24 @@ public class Main {
         member2.setUsername("김후라이드");
         member2.setTeam(team);
         em.persist(member2);
+
+        member2.setTeam(team1);
+
+//        em.flush();
+//        em.clear();
+
+        // 멤버 및 팀 조회 로직 작성
+        System.out.println("============================");
+        Member foundMember = em.find(Member.class, member1.getId());
+        System.out.println(foundMember.getTeam().getName());
+
+        Team foundTeam = em.find(Team.class, team.getId());
+        List<Member> members = foundTeam.getMembers();
+
+        for (Member member : members) {
+            System.out.println(member.getUsername());
+        }
+        System.out.println("============================");
 
     }
 
